@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <regex>
@@ -13,41 +14,58 @@
 
 #include <gsl/gsl>
 
-inline std::string Found(const bool result)
-{
-    return ((result) ? "Found" : "Not found");
-}
-
-
 int main(int argc, char *argv[])
 {
-    const std::string defaultRegex { "\\(?\\d{3}[-\\) ]+\\d{3}[- ]?\\d{4}" };
+    const std::string data = "<Person>\n"
+                             "    <FirstName>John</FirstName>\n"
+                             "    <LastName>Meier</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>Kobe</FirstName>\n"
+                             "    <LastName>Bryant</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>Charles</FirstName>\n"
+                             "    <LastName>Barkley</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>John</FirstName>\n"
+                             "    <LastName>Cena</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>Jacob</FirstName>\n"
+                             "    <LastName>Jingleheimer-Schmidtt</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>John</FirstName>\n"
+                             "    <LastName>Kelly</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>James</FirstName>\n"
+                             "    <LastName>Mattis</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>Paul</FirstName>\n"
+                             "    <LastName>Rudd</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>Jimmy</FirstName>\n"
+                             "    <LastName>Kimmel</LastName>\n"
+                             "</Person>\n"
+                             "<Person>\n"
+                             "    <FirstName>Jake</FirstName>\n"
+                             "    <LastName>Paul</LastName>\n"
+                             "</Person>\n";
 
-    std::regex phoneNumberRegex;
+    std::regex tagRegex("<(.*)>(.*)</(\\1)>");
 
-    if (argc == 1)
-    {
-        std::cout << "[No regex supplied, using default]: /" << defaultRegex << "/\n";
+    // Use a std::regex_iterator to process each matched substring as element in an algorithm
+    std::sregex_iterator beg(data.cbegin(), data.cend(), tagRegex);
+    std::sregex_iterator end;
 
-        phoneNumberRegex = defaultRegex;
-    } else
-    {
-        phoneNumberRegex = std::regex { argv[1] };
-    }
-
-    std::vector<std::string> phoneNumbers = {
-        "813-555-0123",
-        "012 344 0123",
-        "(813) 234-0211",
-        "(124)888-1002"
-    };
-
-    for (auto& phoneNumber : phoneNumbers)
-    {
-        std::cout << "[" << phoneNumber << "]: " << std::boolalpha << std::regex_match(phoneNumber, phoneNumberRegex) << "\n";
-    }
-
-    
-
-    //std::regex_match("XML tag: <tag-name>the value</tag-name>.", m, std::regex("<(.*)>(.*)</(\\1)>"));
+    for_each (beg, end, [](const std::smatch& match) {
+        std::cout << "Match: " << match.str()  << "\n";
+        std::cout << "  Tag: " << match.str(1) << "\n";
+        std::cout << "Value: " << match.str(2) << "\n\n";
+    });
 }
