@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Libs\Catch2-master\Catch2\include;C:\Libs\Boost\boost_1_67_0;C:\Libs\GSL-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Libs\Boost\boost_1_67_0\stage;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
